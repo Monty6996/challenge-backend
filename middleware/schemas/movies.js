@@ -8,8 +8,8 @@ const schemas = {
 		fecha_creacion: joi.date().required(),
 		calificacion: joi.number().integer().required(),
 	}),
-    update: joi.object().keys({
-        id: joi.number().integer().required(),
+	update: joi.object().keys({
+		id: joi.number().integer().required(),
 		imagen: joi.string().optional(),
 		titulo: joi.string().optional(),
 		generoId: joi.number().integer().optional(),

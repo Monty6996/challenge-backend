@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 const { personajes, peliculas } = require('../models/dataBaseModels');
-const {validateCreate, validateUpdate} = require('../middleware/characters')
+const { validateCreate, validateUpdate } = require('../middleware/characters');
 
 router.get('/', async (req, res) => {
 	try {
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 				where: req.query,
 			});
 		}
-		res.status(200).json(resultado)
+		res.status(200).json(resultado);
 	} catch (error) {
 		res.status(500).json({ error: 'Internal Server Error' });
 	}
@@ -47,7 +47,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', validateCreate, async (req, res) => {
 	try {
 		const { nombre, imagen, edad, peso, historia } = req.body;
-		const [obj] = await personajes.findAll({ where: { nombre, imagen, edad, peso, historia } })
+		const [obj] = await personajes.findAll({
+			where: { nombre, imagen, edad, peso, historia },
+		});
 		if (obj) {
 			res.status(409).json({ error: 'Already Exists!' });
 		} else {
@@ -61,7 +63,7 @@ router.post('/', validateCreate, async (req, res) => {
 			res.status(201).json(mensaje);
 		}
 	} catch (error) {
-		res.status(500).json({ error: 'Internal Server Error'});
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 });
 

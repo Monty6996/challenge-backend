@@ -4,7 +4,7 @@ const express = require('express');
 
 const router = express.Router();
 const { personajes, peliculas, generos } = require('../models/dataBaseModels');
-const {validateCreate, validateUpdate} = require('../middleware/movies')
+const { validateCreate, validateUpdate } = require('../middleware/movies');
 
 /* GET home page. */
 router.get('/', async (req, res) => {
@@ -58,7 +58,7 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
-router.post('/',validateCreate, async (req, res) => {
+router.post('/', validateCreate, async (req, res) => {
 	try {
 		const { titulo, imagen, generoId, fecha_creacion, calificacion } = req.body;
 		if (
@@ -82,7 +82,7 @@ router.post('/',validateCreate, async (req, res) => {
 	}
 });
 
-router.put('/',validateUpdate, async (req, res) => {
+router.put('/', validateUpdate, async (req, res) => {
 	try {
 		const [movie] = await peliculas.findAll({ where: { id: req.body.id } });
 
