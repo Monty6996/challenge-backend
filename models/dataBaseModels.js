@@ -22,7 +22,7 @@ const peliculas = db.define('peliculas', {
 	calificacion: { type: Sequelize.INTEGER(1,5) },
 });
 
-const personajes_asociados = db.define('personajes_asociados', {
+const personajesAsociados = db.define('personajes_asociados', {
 	peliculaId: {
 		type: Sequelize.INTEGER,
 		references: {
@@ -51,4 +51,4 @@ personajes.belongsToMany(peliculas, { through: 'personajes_asociados'});
 
 
 
-module.exports = {personajes, personajes_asociados, peliculas, generos, usuarios};
+module.exports = {personajes, personajesAsociados, peliculas, generos, usuarios};

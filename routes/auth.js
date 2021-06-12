@@ -1,18 +1,22 @@
 const express = require('express');
+
 const router = express.Router();
-const { usuarios } = require('../models/dataBaseModels');
 const sha1 = require('sha1');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const { usuarios } = require('../models/dataBaseModels');
+
 const privateKey = fs.readFileSync('./private/private.pem');
 const singOptions = { algorithm: 'RS512' }
 const createToken = (payload) => jwt.sign(payload, privateKey, singOptions);
+
+const {send} = require('../services/mail')
 
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        [obj] = await usuarios.findAll({ where: { email } });
+        const [obj] = await usuarios.findAll({ where: { email } });
         if (obj) {
             res.status(409).json({ error: 'User Already Registered!' });
         } else {
@@ -20,8 +24,12 @@ router.post('/register', async (req, res) => {
                 email,
                 password: sha1(password)
             }
-            const result = await usuarios.create({ email: user.email });
-            res.status(201).json(result);
+            
+            await usuarios.create(user);
+            
+            const respuesta = await send({ to: email });
+
+            res.status(201).json(respuesta);
         }
     } catch (err) {
         res.status(500).json({ error: 'Internal Server Error' });
@@ -40,7 +48,6 @@ router.post('/login', async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err)
         res.status(500).send({error:'Internal Server Error'})
     }
 })
