@@ -2,8 +2,7 @@ const { Sequelize } = require('sequelize');
 const db = require('../utils/bd');
 
 const personajes = db.define('personajes', {
-	nombre: {
-		type: Sequelize.STRING },
+	nombre: { type: Sequelize.STRING },
     imagen: { type: Sequelize.STRING },
     edad: { type: Sequelize.FLOAT },
     peso: { type: Sequelize.INTEGER },
@@ -41,7 +40,7 @@ const personajes_asociados = db.define('personajes_asociados', {
 });
 
 const usuarios = db.define('usuarios', {
-	email: { type: Sequelize.STRING, primaryKey: true},
+	email: { type: Sequelize.STRING},
 	password: { type: Sequelize.STRING}
 })
 

@@ -6,7 +6,7 @@ const { personajes, peliculas, categorias, generos } = require('../models/dataBa
 router.get('/', async (req, res) => {
 	try {
 		let parametros = {};
-
+		console.log(req.headers)
 		req.query ? (parametros = { where: req.query }) : null;
 
 		req.query.genre
