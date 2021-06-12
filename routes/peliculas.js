@@ -43,7 +43,8 @@ router.get('/:id', async (req, res) => {
 			],
 		});
 
-		res.status(200).json(result);
+		[result] ? res.status(200).json(result) : res.status(404).json({ error: 'Not Found' });
+
 	} catch (error) {
 		res.status(500).json(error);
 	}
@@ -51,39 +52,45 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
 	try {
-		const { nombre, imagen, edad, peso, historia } = req.body;
-		const mensaje = await personaje.create({
-			nombre,
-			imagen,
-			edad,
-			peso,
-			historia,
-		});
-		res.status(200).json(mensaje);
+		const { titulo, imagen, generoId, fecha_creacion, calificacion } = req.body;
+		if(await peliculas.findAll({ where: { titulo, imagen, generoId, fecha_creacion, calificacion } })) { return res.status(409).json({ error:'Already Exists!'}) }
+        const mensaje = await peliculas.create({
+					imagen,
+					titulo,
+					generoId,
+					fecha_creacion,
+					calificacion,
+				});
+		res.status(201).json(mensaje);
 	} catch (err) {
-		console.log(err);
 		res.end(500);
 	}
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/', async (req, res) => {
 	try {
-		const result = await personajes.update(req.body, {
-			where: { id: req.params.id },
-		});
-		res.status(200).json(result);
+		const [movie] = await peliculas.findAll({ where: { id: req.body.id } });
+
+		if (movie) {
+			const result = await peliculas.update(req.body, {
+				where: { id: req.body.id },
+			});
+			res.status(200).json(result);
+		} else {
+			res.status(404).json({ error: 'Not Found' });
+		}
 	} catch (error) {
-		console.log(error);
 		res.status(500).json(error);
 	}
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/', async (req, res) => {
 	try {
-		const result = await personajes.destroy({ where: { id: req.params.id } });
-		res.status(200).json(result);
+		const result = await peliculas.destroy({ where: { id: req.body.id } });
+		(result === 1)
+			? res.sendStatus(204)
+			: res.status(404).json({ error: 'Not Found' });
 	} catch (error) {
-		console.log(error);
 		res.status(500).json(error);
 	}
 });

@@ -40,6 +40,11 @@ const personajes_asociados = db.define('personajes_asociados', {
 	},
 });
 
+const usuarios = db.define('usuarios', {
+	email: { type: Sequelize.STRING, primaryKey: true},
+	password: { type: Sequelize.STRING}
+})
+
 generos.hasMany(peliculas);
 peliculas.belongsTo(generos);
 peliculas.belongsToMany(personajes, { through: 'personajes_asociados'});
@@ -47,4 +52,4 @@ personajes.belongsToMany(peliculas, { through: 'personajes_asociados'});
 
 
 
-module.exports = {personajes, personajes_asociados, peliculas, generos};
+module.exports = {personajes, personajes_asociados, peliculas, generos, usuarios};
